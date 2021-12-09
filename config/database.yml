@@ -11,10 +11,12 @@ default: &default
   database: rails_advanced_report_dev
   username: rails_advanced_report
   password: password
-  timeout: 5000
+  host: localhost
+  port: "5432"
 
 development:
   <<: *default
+  database: rails_advanced_report_dev
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
