@@ -1,4 +1,16 @@
 - if answer.persisted?
-	p= answer.body
-	- if current_user&.author_of?(answer)
-		p= link_to 'Delete answer', answer_path(answer), method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn-danger'
+  answer id="answer-del-#{answer.id}"
+    .answer id="answer-#{answer.id}"
+      = answer.body
+      h2= answer.best if answer.best
+    - if current_user&.author_of?(answer)
+      p= link_to 'Delete answer', answer_path(answer), method: :delete, :remote => true, :class => 'delete_answer'
+      p= link_to 'Best', best_answer_path(answer), method: :patch, :remote => true, class: 'answer-best', data: { answer_id: answer.id }, html: { id: "answer-best" }
+    - if current_user&.author_of?(answer)
+         =link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+  = form_with model: answer, locale: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }  do |f|
+      p
+        = f.label :body, "Answer body", id: "body_update"
+        = f.text_area :body, id: "body_update"
+      .actions
+        = f.submit 'Save'

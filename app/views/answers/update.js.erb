@@ -1,0 +1,21 @@
+$('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
+<%  if !@answer.errors.present? %>
+var answer;
+answer = '<%= @answer.id %>'
+console.log('oiiu' + answer)
+var elem;
+elem = document.getElementById('answer-' + answer);
+console.log(elem)
+elem.innerHTML = '<%= @answer.body %>'
+$('form#edit-answer-' + answer).addClass('hidden');
+
+//})
+
+<%end%>
+<%  if @answer.best %>
+
+$('form#answer-best').addClass('hidden');
+
+//})
+
+<%end%>
