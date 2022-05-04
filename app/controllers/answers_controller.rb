@@ -11,8 +11,7 @@ class AnswersController < ApplicationController
   end
 
   def best
-    answer = @answer.question.answers.find_by(best: true)
-    answer.update(best: false) if answer
+    @answer.best_answer_false
     @answer.update(best: true)
 
   end
