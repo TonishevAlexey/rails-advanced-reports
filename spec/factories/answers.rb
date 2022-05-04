@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :answer do
-    sequence(:body) { |n| "My text № #{n}" }
+    sequence(:body) { |n| "Answer № #{n}" }
     association :question, factory: :question
     association :user, factory: :user
 
