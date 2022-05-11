@@ -7,10 +7,16 @@
       p= link_to 'Delete answer', answer_path(answer), method: :delete, :remote => true, :class => 'delete_answer'
       p= link_to 'Best', best_answer_path(answer), method: :patch, :remote => true, class: 'answer-best', data: { answer_id: answer.id }, html: { id: "answer-best" }
     - if current_user&.author_of?(answer)
-         =link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+      = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+      .files id="files-#{answer.id}"
+        - if answer.files.attached?
+            div= render partial: '/answers/file', collection: answer.files
   = form_with model: answer, locale: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }  do |f|
-      p
-        = f.label :body, "Answer body", id: "body_update"
-        = f.text_area :body, id: "body_update"
-      .actions
-        = f.submit 'Save'
+    p
+      = f.label :body, "Answer body", id: "body_update"
+      = f.text_area :body, id: "body_update"
+    p
+      = f.label :files
+      = f.file_field :files, multiple: true
+    .actions
+      = f.submit 'Save'
