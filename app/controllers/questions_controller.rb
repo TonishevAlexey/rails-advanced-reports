@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
+  before_action :question, only: [:show, :edit, :update, :destroy]
 
   def index
     @questions = Question.all
@@ -11,6 +12,15 @@ class QuestionsController < ApplicationController
 
   def new
     @question = current_user.questions.new
+  end
+  def edit
+  end
+  def update
+    if @question.update(question_params)
+      redirect_to @question
+    else
+      render :edit
+    end
   end
 
   def create
@@ -35,7 +45,8 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body,
+                                     files: [])
   end
 
   def question
