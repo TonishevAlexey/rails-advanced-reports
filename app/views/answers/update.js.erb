@@ -5,10 +5,16 @@ answer = '<%= @answer.id %>'
 var elem;
 elem = document.getElementById('answer-' + answer);
 elem.innerHTML = '<%= @answer.body %>'
+<%  if @answer.files.present? %>
 file = '<%= @answer.id %>'
 elem = document.getElementById('files-' + file);
-
 $(elem).append('<%= j render @answer.files.last %> ');
+<%end%>
+<%  if @answer.links.present? %>
+link = '<%= @answer.id %>'
+elem = document.getElementById('links-' + link);
+$(elem).append('<%= j render @answer.links.last %> ');
+<%end%>
 $('form#edit-answer-' + answer).addClass('hidden');
 
 //})

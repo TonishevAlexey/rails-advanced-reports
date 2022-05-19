@@ -76,3 +76,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'jquery-rails'
 gem "aws-sdk-s3", require: false
 gem 'rack-cors'
+gem "cocoon"
+gem 'merit'

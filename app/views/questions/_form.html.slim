@@ -1,10 +1,34 @@
-
 = form_with(model: [@user, @question], local: true) do |f|
   = render 'shared/errors', resource: @question
   p
     = f.label :title
     = f.text_field :title
+  p
     = f.label :body
     = f.text_area :body
+  p
+    = f.file_field :files, multiple: true
+
+  p
+    = f.fields_for :reward do |reward|
+      = render "reward_nested_fields", f: reward
+  p
+    - unless @question.reward
+      .reward
+        = link_to_add_association "Награды", f, "reward",
+                partial: "reward_nested_fields",class: "add-reward-link",id: "add-reward-link"
+  p
+    = f.fields_for :links do |link|
+      = render "partials/links_nested_fields", f: link
+  p
+    = link_to_add_association "Ссылки", f, "links",
+            class: 'create_object',
+            partial: "partials/links_nested_fields"
+  p
     = f.submit 'Ask'
-    = f.file_field :files, multiple: true, direct_upload: true
+javascript:
+    $('.reward').on('click', '.add-reward-link', function (e) {
+        $('.add-reward-link').addClass('hidden')
+    })
+
+

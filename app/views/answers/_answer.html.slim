@@ -2,7 +2,17 @@
   answer id="answer-del-#{answer.id}"
     .answer id="answer-#{answer.id}"
       = answer.body
+      .links id="links-#{answer.id}"
+        - answer.links.each do |link|
+          .link id = "link-#{link.id}"
+            p
+              = link.name + ": "
+              = link.link
+              - if current_user&.author_of?(answer)
+                = link_to "❌", link_path(link.id), method: :delete, remote: true
       h2= answer.best if answer.best
+    - if current_user&.author_of?(answer.question)
+        p= link_to 'Reward answer', reward_answer_path(answer), method: :patch, :remote => true, :class => 'delete_answer'
     - if current_user&.author_of?(answer)
       p= link_to 'Delete answer', answer_path(answer), method: :delete, :remote => true, :class => 'delete_answer'
       p= link_to 'Best', best_answer_path(answer), method: :patch, :remote => true, class: 'answer-best', data: { answer_id: answer.id }, html: { id: "answer-best" }
@@ -10,7 +20,7 @@
       = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
       .files id="files-#{answer.id}"
         - if answer.files.attached?
-            div= render partial: '/answers/file', collection: answer.files
+          div= render partial: '/answers/file', collection: answer.files
   = form_with model: answer, locale: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }  do |f|
     p
       = f.label :body, "Answer body", id: "body_update"
@@ -18,5 +28,12 @@
     p
       = f.label :files
       = f.file_field :files, multiple: true
+    p
+      = f.fields_for :links do |link|
+        = render "partials/links_nested_fields", f: link
+    p
+      = link_to_add_association "Ссылки", f, "links",
+              class: 'create_object',
+              partial: "partials/links_nested_fields"
     .actions
       = f.submit 'Save'

@@ -1,0 +1,6 @@
+- @rewards.each do |reward|
+  p
+    = image_tag reward.image, style: "width: 250px"
+    = reward.title
+    = " question: " + reward.question.title
+
