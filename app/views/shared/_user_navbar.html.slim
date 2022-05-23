@@ -7,6 +7,7 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
     .form-inline.my-2.my-lg-0
       - if user_signed_in?
         p= link_to 'Sign out', destroy_user_session_path, method: :delete, class:"btn btn-warning ml-2 mr-2"
+        p= link_to 'Rewards', rewards_path
       - else
         p= link_to 'Sign in', new_user_session_path, class:"btn btn-info ml-2 mr-2"
         p= link_to 'Sign up', new_user_registration_path, class:"btn btn-info ml-2 mr-2"

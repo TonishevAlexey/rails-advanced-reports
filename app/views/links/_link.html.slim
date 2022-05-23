@@ -1,0 +1,6 @@
+- link = @answer.links.last
+.link id = "link-#{link.id}"
+  p
+    = link.name + ": "
+    = link.link
+    = link_to "❌", link_path(link.id), method: :delete, remote: true
