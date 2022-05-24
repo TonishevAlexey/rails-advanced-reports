@@ -2,9 +2,12 @@ class Answer < ApplicationRecord
   belongs_to :user
   belongs_to :question
   has_many_attached :files
-  has_many :links, dependent: :destroy, as: :linkable
 
+  has_many :links, dependent: :destroy, as: :linkable
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
+
+  has_many :grade, dependent: :destroy, as: :gradable
+
   default_scope {order(best: "desc").order(created_at: "asc")}
   validates :body, presence: true
   def best_answer_false

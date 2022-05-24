@@ -10,9 +10,22 @@
               = link.link
               - if current_user&.author_of?(answer)
                 = link_to "❌", link_path(link.id), method: :delete, remote: true
+      p
+        .grade
+          -unless answer.grade.first.gradings.find_by(user_id: current_user.id).kind  == "plus" ||  current_user.author_of?(answer)
+            = link_to "➕", grade_up_answer_path(answer.id), method: :post, remote: true ,class: 'grade-plus ',id: "grade-plus-#{answer.id}"
+          -else
+            = link_to "➕", grade_up_answer_path(answer.id), method: :post, remote: true ,class: 'grade-plus hidden',id: "grade-plus-#{answer.id}"
+          .grade-val id="grade-#{answer.id}"
+            = answer.grade.present? ? answer.grade.first.value : "0"
+          -unless answer.grade.first.gradings.find_by(user_id: current_user.id).kind  == "minus" ||  current_user.author_of?(answer)
+            = link_to "−",grade_down_answer_path(answer.id), method: :post, remote: true,class: 'grade-minus ',id: "grade-minus-#{answer.id}"
+          -else
+            = link_to "−",grade_down_answer_path(answer.id), method: :post, remote: true,class: 'grade-minus hidden',id: "grade-minus-#{answer.id}"
+
       h2= answer.best if answer.best
     - if current_user&.author_of?(answer.question)
-        p= link_to 'Reward answer', reward_answer_path(answer), method: :patch, :remote => true, :class => 'delete_answer'
+      p= link_to 'Reward answer', reward_answer_path(answer), method: :patch, :remote => true, :class => 'delete_answer'
     - if current_user&.author_of?(answer)
       p= link_to 'Delete answer', answer_path(answer), method: :delete, :remote => true, :class => 'delete_answer'
       p= link_to 'Best', best_answer_path(answer), method: :patch, :remote => true, class: 'answer-best', data: { answer_id: answer.id }, html: { id: "answer-best" }

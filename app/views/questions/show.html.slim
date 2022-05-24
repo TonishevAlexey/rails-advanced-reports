@@ -12,7 +12,18 @@ h5= "Ссылки:"
       = link.link
       - if current_user&.author_of?(@question)
         = link_to "❌", link_path(link.id), method: :delete, remote: true
-
+p
+      .grade
+        - unless @question.grade.first&.gradings&.find_by(user_id: current_user.id)&.kind  == "plus" ||  current_user.author_of?(@question)
+          = link_to "➕", grade_up_question_path(@question.id), method: :post, remote: true, class: 'grade-plus ', id: "grade-plus-question-#{@question.id}"
+        - else
+          = link_to "➕", grade_up_question_path(@question.id), method: :post, remote: true, class: 'grade-plus hidden', id: "grade-plus-question-#{@question.id}"
+        .grade-val id="grade-question-#{@question.id}"
+          = @question.grade.present? ? @question.grade.first.value : "0"
+        - unless @question.grade.first&.gradings&.find_by(user_id: current_user.id)&.kind  == "minus" ||  current_user.author_of?(@question)
+          = link_to "−",grade_down_question_path(@question.id), method: :post, remote: true, class: 'grade-question-minus ', id: "grade-question-minus-#{@question.id}"
+        - else
+          = link_to "−",grade_down_question_path(@question.id), method: :post, remote: true, class: 'grade-question-minus hidden', id: "grade-question-minus-#{@question.id}"
 h5= "Файлы:"
 
 - if @question.files.attached?
