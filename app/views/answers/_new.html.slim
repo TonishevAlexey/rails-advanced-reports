@@ -2,19 +2,17 @@ h5= 'Answer the question'
 .answer-errors
   = render 'shared/errors', resource: @answer
 = form_with(model: [@question, @answer], local: false) do |f|
-
-  p
-    = f.label :body
-    = f.text_area :body
-  p
-    = f.label :files
-    = f.file_field :files, multiple: true
     p
-      = f.fields_for :links do |link|
-        = render "partials/links_nested_fields", f: link
+      = f.label :body, "Answer body", id: "body_create"
+      = f.text_area :body, id: "body_create"
     p
-      = link_to_add_association "Ссылки", f, "links",
-              class: 'create_object',
-              partial: "partials/links_nested_fields"
-  .actions
-    = f.submit 'Answer'
+      = f.label :files
+      = f.file_field :files, multiple: true
+      p
+        = f.fields_for :links do |link|
+          = render "partials/links_nested_fields", f: link
+      p
+        = link_to_add_association "Ссылки", f, "links",
+                class: 'create_object',
+                partial: "partials/links_nested_fields"
+      = f.submit 'Create answer', id: "create_answer"

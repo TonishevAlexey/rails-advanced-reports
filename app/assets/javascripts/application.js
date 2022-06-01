@@ -17,4 +17,4 @@
 //= require turbolinks
 //= require_tree .
 //= require cocoon
-import "grade"
+import "vote"

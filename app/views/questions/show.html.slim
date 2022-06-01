@@ -1,9 +1,14 @@
+ruby:
+  vote = @question.votes.user_vote(current_user&.id).first
+  vote_kind = vote.present? ? vote.kind : ""
 h1= @question.title
+
+
 p= @question.body
-= link_to 'Edit', edit_question_path(@question)
+- if current_user&.author_of?(@question)
+  = link_to 'Edit', edit_question_path(@question)
 h5= "Ссылки:"
-/ p
-/ -binding.pry
+
 
 - @question.links.each do |link|
   .link id = "link-#{link.id}"
@@ -13,17 +18,17 @@ h5= "Ссылки:"
       - if current_user&.author_of?(@question)
         = link_to "❌", link_path(link.id), method: :delete, remote: true
 p
-      .grade
-        - unless @question.grade.first&.gradings&.find_by(user_id: current_user.id)&.kind  == "plus" ||  current_user.author_of?(@question)
-          = link_to "➕", grade_up_question_path(@question.id), method: :post, remote: true, class: 'grade-plus ', id: "grade-plus-question-#{@question.id}"
+      .vote
+        - unless (vote_kind  == "plus" ||  current_user&.author_of?(@question)) ||  !(current_user.present?)
+          = link_to "➕", vote_up_question_path(id: @question.id), method: :post, remote: true, class: 'vote-plus ', id: "vote-plus-question-#{@question.id}"
         - else
-          = link_to "➕", grade_up_question_path(@question.id), method: :post, remote: true, class: 'grade-plus hidden', id: "grade-plus-question-#{@question.id}"
-        .grade-val id="grade-question-#{@question.id}"
-          = @question.grade.present? ? @question.grade.first.value : "0"
-        - unless @question.grade.first&.gradings&.find_by(user_id: current_user.id)&.kind  == "minus" ||  current_user.author_of?(@question)
-          = link_to "−",grade_down_question_path(@question.id), method: :post, remote: true, class: 'grade-question-minus ', id: "grade-question-minus-#{@question.id}"
+          = link_to "➕", vote_up_question_path(@question.id), method: :post, remote: true, class: 'vote-plus hidden', id: "vote-plus-question-#{@question.id}"
+        .vote-val id="vote-question-#{@question.id}"
+          =  @question.vote_result.present? ? @question.vote_result : "0"
+        - unless (vote_kind  == "minus" ||  current_user&.author_of?(@question)) ||  !(current_user.present?)
+          = link_to "−",vote_down_question_path(@question.id), method: :post, remote: true, class: 'vote-minus ', id: "vote-minus-question-#{@question.id}"
         - else
-          = link_to "−",grade_down_question_path(@question.id), method: :post, remote: true, class: 'grade-question-minus hidden', id: "grade-question-minus-#{@question.id}"
+          = link_to "−",vote_down_question_path(@question.id), method: :post, remote: true, class: 'vote-minus hidden', id: "vote-minus-question-#{@question.id}"
 h5= "Файлы:"
 
 - if @question.files.attached?

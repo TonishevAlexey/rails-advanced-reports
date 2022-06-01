@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_24_145232) do
+ActiveRecord::Schema.define(version: 2022_05_24_143226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,25 +52,6 @@ ActiveRecord::Schema.define(version: 2022_05_24_145232) do
     t.boolean "best", default: false
     t.index ["question_id"], name: "index_answers_on_question_id"
     t.index ["user_id"], name: "index_answers_on_user_id"
-  end
-
-  create_table "grades", force: :cascade do |t|
-    t.integer "value"
-    t.string "gradable_type"
-    t.bigint "gradable_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["gradable_type", "gradable_id"], name: "index_grades_on_gradable"
-  end
-
-  create_table "gradings", force: :cascade do |t|
-    t.bigint "grade_id"
-    t.bigint "user_id"
-    t.string "kind", default: "default"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["grade_id"], name: "index_gradings_on_grade_id"
-    t.index ["user_id"], name: "index_gradings_on_user_id"
   end
 
   create_table "links", force: :cascade do |t|
@@ -115,13 +96,24 @@ ActiveRecord::Schema.define(version: 2022_05_24_145232) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.integer "value", default: 0
+    t.string "votable_type"
+    t.bigint "votable_id"
+    t.bigint "user_id", null: false
+    t.string "kind", default: "default"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_votes_on_user_id"
+    t.index ["votable_type", "votable_id"], name: "index_votes_on_votable"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
-  add_foreign_key "gradings", "grades"
-  add_foreign_key "gradings", "users"
   add_foreign_key "questions", "users"
   add_foreign_key "rewards", "questions"
   add_foreign_key "rewards", "users"
+  add_foreign_key "votes", "users"
 end

@@ -1,3 +1,6 @@
+ruby:
+  vote = answer.votes.user_vote(current_user&.id).first
+  vote_kind = vote.present? ? vote.kind : ""
 - if answer.persisted?
   answer id="answer-del-#{answer.id}"
     .answer id="answer-#{answer.id}"
@@ -11,17 +14,17 @@
               - if current_user&.author_of?(answer)
                 = link_to "❌", link_path(link.id), method: :delete, remote: true
       p
-        .grade
-          -unless answer.grade.first.gradings.find_by(user_id: current_user.id).kind  == "plus" ||  current_user.author_of?(answer)
-            = link_to "➕", grade_up_answer_path(answer.id), method: :post, remote: true ,class: 'grade-plus ',id: "grade-plus-#{answer.id}"
+        .vote
+          -unless (vote_kind  == "plus" ||  current_user&.author_of?(answer)) ||  !(current_user.present?)
+            = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true ,class: 'vote-plus ',id: "vote-plus-#{answer.id}"
           -else
-            = link_to "➕", grade_up_answer_path(answer.id), method: :post, remote: true ,class: 'grade-plus hidden',id: "grade-plus-#{answer.id}"
-          .grade-val id="grade-#{answer.id}"
-            = answer.grade.present? ? answer.grade.first.value : "0"
-          -unless answer.grade.first.gradings.find_by(user_id: current_user.id).kind  == "minus" ||  current_user.author_of?(answer)
-            = link_to "−",grade_down_answer_path(answer.id), method: :post, remote: true,class: 'grade-minus ',id: "grade-minus-#{answer.id}"
+            = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true ,class: 'vote-plus hidden',id: "vote-plus-#{answer.id}"
+          .vote-val id="vote-#{answer.id}"
+            = answer.vote_result.present? ? answer.vote_result : "0"
+          -unless vote_kind  == "plus" ||  current_user&.author_of?(answer) ||  !(current_user.present?)
+            = link_to "−",vote_down_answer_path(answer.id), method: :post, remote: true,class: 'vote-minus ',id: "vote-minus-#{answer.id}"
           -else
-            = link_to "−",grade_down_answer_path(answer.id), method: :post, remote: true,class: 'grade-minus hidden',id: "grade-minus-#{answer.id}"
+            = link_to "−",vote_down_answer_path(answer.id), method: :post, remote: true,class: 'vote-minus hidden',id: "vote-minus-#{answer.id}"
 
       h2= answer.best if answer.best
     - if current_user&.author_of?(answer.question)
