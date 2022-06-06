@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-feature 'user can create answer', %q{
+feature 'user can create answer', '
   In order to help people
   authenticated user can create answer
-} do
+' do
   given(:user) { create(:user) }
   given!(:question) { create(:question, user: user) }
 
@@ -15,7 +15,7 @@ feature 'user can create answer', %q{
       click_link 'Show'
     end
 
-    scenario 'answer the question',js: true do
+    scenario 'answer the question', js: true do
       #
       # fill_in 'answer_body', with: 'answer for a question'
       # click_link_or_button 'create_answer'
@@ -25,7 +25,7 @@ feature 'user can create answer', %q{
       # expect(page).to have_content 'answer for a question'
     end
 
-    scenario 'answer the question with errors',js: true do
+    scenario 'answer the question with errors', js: true do
       # click_on 'Create answer'
       #
       # expect(page).to have_content "Body can't be blank"

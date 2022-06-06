@@ -43,7 +43,9 @@ RSpec.describe QuestionsController, type: :controller do
 
       context 'with invalid attributes' do
         it 'not saved in database' do
-          expect { post :create, params: { question: attributes_for(:question, :invalid) } }.to_not change(Question, :count)
+          expect do
+            post :create, params: { question: attributes_for(:question, :invalid) }
+          end.to_not change(Question, :count)
         end
 
         it 'render new with question unsaved' do
@@ -94,4 +96,3 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 end
-

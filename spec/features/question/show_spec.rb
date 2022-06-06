@@ -1,9 +1,8 @@
 require 'rails_helper'
 
-feature 'User can see a question and answers if exist', %q{ All users can see any question with existing answers } do
-
-  given(:user) {create(:user)}
-  given!(:question) {create(:question)}
+feature 'User can see a question and answers if exist', ' All users can see any question with existing answers ' do
+  given(:user) { create(:user) }
+  given!(:question) { create(:question) }
   given!(:answers) { question.answers }
 
   scenario 'Authenticated user can see a question with answers' do

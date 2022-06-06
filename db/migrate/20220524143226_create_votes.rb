@@ -4,7 +4,7 @@ class CreateVotes < ActiveRecord::Migration[6.1]
       t.integer :value, default: 0
       t.references :votable, polymorphic: true
       t.references :user, null: false, foreign_key: true
-      t.string :kind, default: "default"
+      t.string :kind, default: 'default'
 
       t.timestamps
     end

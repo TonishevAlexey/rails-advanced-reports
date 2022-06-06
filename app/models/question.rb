@@ -1,5 +1,4 @@
 class Question < ApplicationRecord
-
   has_many :votes, dependent: :destroy, as: :votable
   belongs_to :user
   has_many :answers, dependent: :destroy

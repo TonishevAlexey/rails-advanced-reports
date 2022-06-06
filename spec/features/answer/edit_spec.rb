@@ -1,28 +1,27 @@
 require 'rails_helper'
 
-feature 'Edit answer', %q{
+feature 'Edit answer', '
   In order to update anwer
   As an author
   I want to be to be able to edit answer
-} do
-
+' do
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
   given!(:question) { create(:question) }
   given!(:answer) { create(:answer, question: question, user: user) }
 
-  scenario "Un-authenticated user want to edit answer" do
+  scenario 'Un-authenticated user want to edit answer' do
     visit question_path(question)
     expect(page).to_not have_link 'Edit'
   end
 
-  describe "Authenticated user" do
+  describe 'Authenticated user' do
     before do
       sign_in(user)
       visit question_path(question)
     end
 
-    scenario "sees link to edit" do
+    scenario 'sees link to edit' do
       expect(page).to have_link 'Edit'
     end
 

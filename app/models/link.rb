@@ -5,12 +5,11 @@ class Link < ApplicationRecord
   validate :validate_link
 
   def validate_link
-    unless valid_url?
-    errors.add(:link, "url invalid")
-    end
+    errors.add(:link, 'url invalid') unless valid_url?
   end
+
   def valid_url?
-    uri = URI.parse(self.link)
+    uri = URI.parse(link)
     uri.is_a?(URI::HTTP) && !uri.host.nil?
   rescue URI::InvalidURIError
     false

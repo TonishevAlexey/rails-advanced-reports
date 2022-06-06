@@ -1,7 +1,6 @@
 require 'rails_helper'
 
-feature 'User can see all question', %q{ All users can see list of questions } do
-
+feature 'User can see all question', ' All users can see list of questions ' do
   given(:user) { create(:user) }
   given!(:questions) { create_list(:question, 2) }
 
