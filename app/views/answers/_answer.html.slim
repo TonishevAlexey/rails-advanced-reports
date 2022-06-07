@@ -14,7 +14,7 @@ ruby:
               - if current_user&.author_of?(answer)
                 = link_to "❌", link_path(link.id), method: :delete, remote: true
       p
-        .vote
+         vote
           -unless (vote_kind  == "plus" ||  current_user&.author_of?(answer)) ||  !(current_user.present?)
             = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true ,class: 'vote-plus ',id: "vote-plus-#{answer.id}"
           -else

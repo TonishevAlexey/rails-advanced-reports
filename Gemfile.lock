@@ -330,7 +330,7 @@ DEPENDENCIES
   aws-sdk-s3
   bootsnap (>= 1.1.0)
   byebug
-  capybara (>= 2.15)
+  capybara (>= 3.26)
   chromedriver-helper
   cocoon
   coffee-rails (~> 4.2)

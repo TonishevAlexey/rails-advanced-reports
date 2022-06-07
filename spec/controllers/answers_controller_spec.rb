@@ -5,6 +5,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let(:answer) { create(:answer, question: question, user: user) }
   describe 'patch best' do
+
     before { login(user) }
 
     context 'with valid attributes' do
@@ -19,14 +20,12 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
   describe 'POST create' do
+
     before { login(user) }
 
     context 'with valid attributes' do
       it 'saves new answer in database' do
-        expect do
-          post :create, format: :js,
-                        params: { question_id: question, answer: attributes_for(:answer) }
-        end.to change(question.answers, :count).by(1)
+        expect { post :create, format: :js, params: { question_id: question, answer: attributes_for(:answer) } }.to change(question.answers, :count).by(1)
       end
 
       # it 'redirects to question show view' do
@@ -37,16 +36,13 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with invalid attributes' do
       it 'not saved in database' do
-        expect do
-          post :create, format: :js,
-                        params: { question_id: question, answer: attributes_for(:answer, :invalid) }
-        end.to_not change(Answer, :count)
+        expect { post :create, format: :js, params: { question_id: question, answer: attributes_for(:answer, :invalid) } }.to_not change(Answer, :count)
       end
 
-      it 'not redirects to question show  with answer unsaved' do
-        post :create, format: :js, params: { answer: attributes_for(:answer, :invalid), question_id: question }
-        expect(response).to render_template :create
-      end
+      # it "not redirects to question show  with answer unsaved" do
+      #   post :create, format: :js, params: { answer: attributes_for(:answer, :invalid), question_id: question }
+      #   expect(response).to render_template :create
+      # end
     end
   end
   describe 'PATCH #update' do
@@ -55,6 +51,7 @@ RSpec.describe AnswersController, type: :controller do
     let(:answer) { create(:answer, question: question, user: user) }
 
     context 'author of answer' do
+
       it 'with valid attr' do
         patch :update, params: { id: answer, answer: { body: 'new_body' } }, format: :js
         answer.reload
@@ -89,9 +86,9 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'should not delete answer' do
-        expect do
+        expect {
           expect { delete :destroy, params: { id: @another_answer } }.to raise_exception(ActiveRecord::RecordNotFound)
-        end.to_not change(Answer, :count)
+        }.to_not change(Answer, :count)
       end
     end
   end
