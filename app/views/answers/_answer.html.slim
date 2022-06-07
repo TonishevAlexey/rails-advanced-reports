@@ -33,7 +33,7 @@ ruby:
       p= link_to 'Delete answer', answer_path(answer), method: :delete, :remote => true, :class => 'delete_answer'
       p= link_to 'Best', best_answer_path(answer), method: :patch, :remote => true, class: 'answer-best', data: { answer_id: answer.id }, html: { id: "answer-best" }
     - if current_user&.author_of?(answer)
-      = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+      p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
       .files id="files-#{answer.id}"
         - if answer.files.attached?
           div= render partial: '/answers/file', collection: answer.files

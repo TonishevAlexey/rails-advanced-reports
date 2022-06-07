@@ -16,19 +16,20 @@ feature 'user can create answer', '
     end
 
     scenario 'answer the question', js: true do
-      #
-      # fill_in 'answer_body', with: 'answer for a question'
-      # click_link_or_button 'create_answer'
-      # # expect(page).to have_content 'Your answer successfully created.'
-      # # expect(page).to have_content question.title
-      # # expect(page).to have_content question.body
-      # expect(page).to have_content 'answer for a question'
+
+      fill_in 'body_create', with: 'answer for a question'
+      click_on 'Create answer'
+
+      expect(page).to have_content 'Your answer successfully created.'
+      expect(page).to have_content question.title
+      expect(page).to have_content question.body
+      expect(page).to have_content 'answer for a question'
     end
 
     scenario 'answer the question with errors', js: true do
-      # click_on 'Create answer'
-      #
-      # expect(page).to have_content "Body can't be blank"
+      click_on 'Create answer'
+
+      expect(page).to have_content "Body can't be blank"
     end
   end
 

@@ -26,14 +26,12 @@ feature 'Edit answer', '
     end
 
     scenario 'try to edit his answer', js: true do
-      # within '.answers' do
-      # click_on 'Edit'
-      #   fill_in "answer_body", with: "edit answer"
-      #   click_on 'Save'
-      #   expect(page).to_not have_content answer.body
-      #   expect(page).to have_content "edit answer"
-      #   expect(page).to_not have_content 'textarea'
-      # end
+      click_on 'Edit'
+      fill_in "body_update", with: "edit answer"
+      click_on 'Save'
+      expect(page).to_not have_content answer.body
+      expect(page).to have_content "edit answer"
+      expect(page).to_not have_content 'textarea'
     end
   end
 
