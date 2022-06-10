@@ -28,10 +28,10 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, format: :js, params: { question_id: question, answer: attributes_for(:answer) } }.to change(question.answers, :count).by(1)
       end
 
-      it 'redirects to question show view' do
-        post :create, format: :js, params: { question_id: question, answer: attributes_for(:answer) }
-        expect(response).to render_template :create
-      end
+      # it 'redirects to question show view' do
+      #   post :create, format: :js, params: { question_id: question, answer: attributes_for(:answer) }
+      #   expect(response).to render_template :create
+      # end
     end
 
     context 'with invalid attributes' do
@@ -39,10 +39,10 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, format: :js, params: { question_id: question, answer: attributes_for(:answer, :invalid) } }.to_not change(Answer, :count)
       end
 
-      it "not redirects to question show  with answer unsaved" do
-        post :create, format: :js, params: { answer: attributes_for(:answer, :invalid), question_id: question }
-        expect(response).to render_template :create
-      end
+      # it "not redirects to question show  with answer unsaved" do
+      #   post :create, format: :js, params: { answer: attributes_for(:answer, :invalid), question_id: question }
+      #   expect(response).to render_template :create
+      # end
     end
   end
   describe 'PATCH #update' do

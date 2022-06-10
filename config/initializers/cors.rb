@@ -1,4 +1,3 @@
-
 # @note: must be run after initializers/_assets.rb
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
@@ -13,6 +12,6 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
              # All asset fetches should be via GET
              # Support OPTIONS for pre-flight requests
              # https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Preflighted_requests
-             methods: [:get, :options,:put,:post]
+             methods: %i[get options put post]
   end
 end

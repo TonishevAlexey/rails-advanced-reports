@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :question, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: %i[index show]
+  before_action :question, only: %i[show edit update destroy]
+  include Votes
 
   def index
     @questions = Question.all
@@ -13,14 +14,11 @@ class QuestionsController < ApplicationController
   def new
     @question = current_user.questions.new
   end
-  def edit
-  end
+
+  def edit; end
+
   def update
-    if @question.update(question_params)
-      redirect_to @question
-    else
-      render :edit
-    end
+    @question.update(question_params) if current_user.author_of?(@question)
   end
 
   def create
@@ -38,7 +36,7 @@ class QuestionsController < ApplicationController
       @question.destroy
       redirect_to questions_path
     else
-      redirect_to @question, notice: "Not your question!"
+      redirect_to @question, notice: 'Not your question!'
     end
   end
 
@@ -46,7 +44,7 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body,
-                                     files: [], links_attributes: [:_destroy, :id, :name, :link], reward_attributes: [ :id, :title, :image])
+                                     files: [], links_attributes: %i[_destroy id name link], reward_attributes: %i[id title image])
   end
 
   def question

@@ -1,3 +1,6 @@
+ruby:
+  vote = answer.votes.user_vote(current_user&.id).first
+  vote_kind = vote.present? ? vote.kind : ""
 - if answer.persisted?
   answer id="answer-del-#{answer.id}"
     .answer id="answer-#{answer.id}"
@@ -10,14 +13,27 @@
               = link.link
               - if current_user&.author_of?(answer)
                 = link_to "❌", link_path(link.id), method: :delete, remote: true
+      p
+         vote
+          -unless (vote_kind  == "plus" ||  current_user&.author_of?(answer)) ||  !(current_user.present?)
+            = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true ,class: 'vote-plus ',id: "vote-plus-#{answer.id}"
+          -else
+            = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true ,class: 'vote-plus hidden',id: "vote-plus-#{answer.id}"
+          .vote-val id="vote-#{answer.id}"
+            = answer.vote_result.present? ? answer.vote_result : "0"
+          -unless vote_kind  == "plus" ||  current_user&.author_of?(answer) ||  !(current_user.present?)
+            = link_to "−",vote_down_answer_path(answer.id), method: :post, remote: true,class: 'vote-minus ',id: "vote-minus-#{answer.id}"
+          -else
+            = link_to "−",vote_down_answer_path(answer.id), method: :post, remote: true,class: 'vote-minus hidden',id: "vote-minus-#{answer.id}"
+
       h2= answer.best if answer.best
     - if current_user&.author_of?(answer.question)
-        p= link_to 'Reward answer', reward_answer_path(answer), method: :patch, :remote => true, :class => 'delete_answer'
+      p= link_to 'Reward answer', reward_answer_path(answer), method: :patch, :remote => true, :class => 'delete_answer'
     - if current_user&.author_of?(answer)
       p= link_to 'Delete answer', answer_path(answer), method: :delete, :remote => true, :class => 'delete_answer'
       p= link_to 'Best', best_answer_path(answer), method: :patch, :remote => true, class: 'answer-best', data: { answer_id: answer.id }, html: { id: "answer-best" }
     - if current_user&.author_of?(answer)
-      = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+      p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
       .files id="files-#{answer.id}"
         - if answer.files.attached?
           div= render partial: '/answers/file', collection: answer.files
