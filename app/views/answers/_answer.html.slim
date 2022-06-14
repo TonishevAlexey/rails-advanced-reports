@@ -13,9 +13,9 @@ ruby:
               = link.link
               - if current_user&.author_of?(answer)
                 = link_to "❌", link_path(link.id), method: :delete, remote: true
-      .comments id="comments-#{answer.id}"
+      .comments id="comments-answer-#{answer.id}"
         - answer.comments.each do |comment|
-          .comment id = "comment-#{comment.id}"
+          .comment id = "comment-answer-#{comment.id}"
             p
               = comment.body
               - if current_user&.author_of?(comment)

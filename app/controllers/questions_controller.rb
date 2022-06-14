@@ -1,6 +1,8 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :question, only: %i[show edit update destroy]
+  after_action :publish_question, only: :create
+
   include Votes
 
   def index
@@ -14,8 +16,6 @@ class QuestionsController < ApplicationController
 
   def new
     @question = current_user.questions.new
-    gon.question_id = @question.id
-
   end
 
   def edit; end
@@ -52,5 +52,20 @@ class QuestionsController < ApplicationController
 
   def question
     @question ||= params[:id] ? Question.find(params[:id]) : Question.new
+  end
+
+  def publish_question
+    return if @question.errors.any?
+    ActionCable.server.broadcast(
+      "questions",
+      {
+        question: ApplicationController.render(
+          locals: { question: @question,
+                    current_user: current_user,
+          },
+          partial: 'questions/question'
+        )
+      }
+    )
   end
 end

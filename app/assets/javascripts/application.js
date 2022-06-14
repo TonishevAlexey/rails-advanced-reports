@@ -17,4 +17,9 @@
 //= require turbolinks
 //= require_tree .
 //= require cocoon
-import "vote"
+//= require action_cable
+//= require skim
+//= require vote
+
+var App = App || {};
+App.cable = ActionCable.createConsumer();

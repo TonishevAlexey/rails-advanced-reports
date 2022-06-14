@@ -1,7 +1,6 @@
 $(document).on('turbolinks:load', function () {
     $('a.vote-plus').on('ajax:success', function (e) {
         e.preventDefault();
-        console.log(e.detail[0]["class"])
 
         if (e.detail[0]["class"] === "questions") {
            var elem = document.getElementById('vote-question-' + e.detail[0]["id"]);

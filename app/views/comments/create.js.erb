@@ -1,8 +1,10 @@
 $('.answer-errors').html('<%= render 'shared/errors', resource: @comment %>');
 <%  if @comment.persisted? %>
-comment = '<%= @comment.commentable.id %>'
-  elem = document.getElementById('comments-' + comment);
-  console.log(elem)
-$(elem).append('<%= j render @comment %> ');
+//comment = '<%#= @comment.commentable.id %>'
+//comment_parent = '<%#= @comment.commentable.class.to_s.downcase %>'
+
+//  elem = document.getElementById('comments-'+ comment_parent + '-' + comment);
+//  console.log(elem)
+//$(elem).append('<%= j render @comment %> ');
   $('#comment_body').val('');
 <%end%>

@@ -1,47 +1,60 @@
 ruby:
   vote = @question.votes.user_vote(current_user&.id).first
   vote_kind = vote.present? ? vote.kind : ""
-h1= @question.title
+.question id = "#{@question.id}"
+  h1= @question.title
 
 
-p= @question.body
-- if current_user&.author_of?(@question)
-  = link_to 'Edit question', edit_question_path(@question)
-h5= "Ссылки:"
+  p= @question.body
+  - if current_user&.author_of?(@question)
+    = link_to 'Edit question', edit_question_path(@question)
+  - if current_user&.present?
+    p= link_to 'Add comment', '', class: 'create-question-comment', data: { question: @question.id }
+  h5= "Ссылки:"
 
-
-- @question.links.each do |link|
-  .link id = "link-#{link.id}"
+  .comments id="comments-question-#{@question.id}"
+    - @question.comments.each do |comment|
+      .comment id = "comment-question-#{comment.id}"
+        p
+          = comment.body
+          - if current_user&.author_of?(comment)
+            = link_to "❌", comment_path(comment.id), method: :delete, remote: true
+  div class='hidden' id="create-question-comment-#{@question.id}"
     p
-      = link.name + ": "
-      = link.link
-      - if current_user&.author_of?(@question)
-        = link_to "❌", link_path(link.id), method: :delete, remote: true
-p
-      .vote
-        - unless (vote_kind  == "plus" ||  current_user&.author_of?(@question)) ||  !(current_user.present?)
-          = link_to "➕", vote_up_question_path(id: @question.id), method: :post, remote: true, class: 'vote-plus ', id: "vote-plus-question-#{@question.id}"
-        - else
-          = link_to "➕", vote_up_question_path(@question.id), method: :post, remote: true, class: 'vote-plus hidden', id: "vote-plus-question-#{@question.id}"
-        .vote-val id="vote-question-#{@question.id}"
-          =  @question.vote_result.present? ? @question.vote_result : "0"
-        - unless (vote_kind  == "minus" ||  current_user&.author_of?(@question)) ||  !(current_user.present?)
-          = link_to "−",vote_down_question_path(@question.id), method: :post, remote: true, class: 'vote-minus ', id: "vote-minus-question-#{@question.id}"
-        - else
-          = link_to "−",vote_down_question_path(@question.id), method: :post, remote: true, class: 'vote-minus hidden', id: "vote-minus-question-#{@question.id}"
-h5= "Файлы:"
+      = render 'partials/comments_nested_fields', resource: @question, resource_type: 'question'
+  - @question.links.each do |link|
+    .link id = "link-#{link.id}"
+      p
+        = link.name + ": "
+        = link.link
+        - if current_user&.author_of?(@question)
+          = link_to "❌", link_path(link.id), method: :delete, remote: true
+  p
+    .vote
+      - unless (vote_kind == "plus" ||  current_user&.author_of?(@question)) || !(current_user.present?)
+        = link_to "➕", vote_up_question_path(id: @question.id), method: :post, remote: true, class: 'vote-plus ', id: "vote-plus-question-#{@question.id}"
+      - else
+        = link_to "➕", vote_up_question_path(@question.id), method: :post, remote: true, class: 'vote-plus hidden', id: "vote-plus-question-#{@question.id}"
+      .vote-val id="vote-question-#{@question.id}"
+        = @question.vote_result.present? ? @question.vote_result : "0"
+      - unless (vote_kind == "minus" ||  current_user&.author_of?(@question)) || !(current_user.present?)
+        = link_to "−",vote_down_question_path(@question.id), method: :post, remote: true, class: 'vote-minus ', id: "vote-minus-question-#{@question.id}"
+      - else
+        = link_to "−",vote_down_question_path(@question.id), method: :post, remote: true, class: 'vote-minus hidden', id: "vote-minus-question-#{@question.id}"
+  h5= "Файлы:"
 
-- if @question.files.attached?
-  - @question.files.each do |file|
-    .file id = "file-#{file.id}"
-      p= link_to file.filename.to_s, url_for(file)
-      - if current_user&.author_of?(@question)
-        = link_to "Delete file", file_path(file.id), method: :delete, remote: true
-/ - if current_user&.author_of?(@question)
-/   p= link_to 'Delete question', question_path(@question), method: :delete, class: 'btn btn-danger'
-h5= "Ответы:"
+  - if @question.files.attached?
+    - @question.files.each do |file|
+      .file id = "file-#{file.id}"
+        p= link_to file.filename.to_s, url_for(file)
+        - if current_user&.author_of?(@question)
+          = link_to "Delete file", file_path(file.id), method: :delete, remote: true
+  / - if current_user&.author_of?(@question)
+  /   p= link_to 'Delete question', question_path(@question), method: :delete, class: 'btn btn-danger'
+  h5= "Ответы:"
 
-.answers
-  div= render partial: '/answers/answer', collection: @question.answers
+  .answers
+    div= render partial: '/answers/answer', collection: @question.answers
 
-div= render 'answers/new'
+  div= render 'answers/new'
+
