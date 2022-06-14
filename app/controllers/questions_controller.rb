@@ -9,10 +9,13 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = question.answers.new
+
   end
 
   def new
     @question = current_user.questions.new
+    gon.question_id = @question.id
+
   end
 
   def edit; end

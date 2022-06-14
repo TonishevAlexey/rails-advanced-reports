@@ -1,0 +1,8 @@
+$('.answer-errors').html('<%= render 'shared/errors', resource: @comment %>');
+<%  if @comment.persisted? %>
+comment = '<%= @comment.commentable.id %>'
+  elem = document.getElementById('comments-' + comment);
+  console.log(elem)
+$(elem).append('<%= j render @comment %> ');
+  $('#comment_body').val('');
+<%end%>

@@ -9,6 +9,10 @@ class Question < ApplicationRecord
 
   has_one :reward
   accepts_nested_attributes_for :reward, reject_if: :all_blank
+
+  has_many :comments, as: :commentable, dependent: :destroy
+  accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
+
   def vote_result
     votes.sum(:value)
   end
