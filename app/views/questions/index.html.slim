@@ -1,7 +1,7 @@
 p= link_to 'Ask question', new_question_path
 .questions
   - @questions.each do |question|
-    .question id = "question-#{question.id}"
+    .question id = "#{question.id}"
       p= question.title
       p= link_to 'Show', question
       - if current_user&.author_of?(question)

@@ -4,7 +4,7 @@ $(document).on('turbolinks:load', function () {
             return;
         }
         elem = document.getElementById('comments-' + data.comment_parent + '-' + data.parent_id);
-
+        console.log(data.comment)
         $(elem).append( data.comment);
     };
     App.cable.subscriptions.create("CommentsChannel", {
@@ -12,7 +12,14 @@ $(document).on('turbolinks:load', function () {
             return this.follow();
         },
         follow: function() {
-            return this.perform('follow');
+            const QuestionId = $('.question')[0].id
+
+            console.log($('.question')[0].id)
+            console.log($('.question')[0])
+
+            return this.perform('follow', {
+                question_id: QuestionId
+            });
         },
         received: function(data) {
 

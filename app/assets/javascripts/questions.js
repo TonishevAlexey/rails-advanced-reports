@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function () {
     append_question = function(data) {
-        if ($("#question-" + data.question.id)[0] != null) {
+        if ($(data.question.id)[0] != null) {
             return;
         }
          $('.questions').append( data.question);

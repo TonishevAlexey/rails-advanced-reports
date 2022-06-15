@@ -16,9 +16,10 @@ class CommentsController < ApplicationController
 
   private
   def publish_comment
+    question_id = @resource.class.to_s == "Question" ? @resource.id : @resource.question.id
     return if @comment.errors.any?
     ActionCable.server.broadcast(
-      'comments',
+      "comments_question_#{question_id}",
       {
         comment: ApplicationController.render(
           partial: 'comments/comment',

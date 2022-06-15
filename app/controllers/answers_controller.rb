@@ -10,10 +10,6 @@ class AnswersController < ApplicationController
     @answer.user = current_user
     gon.question_id = @question.id
     if @answer.save
-      # gon.answer_gon = @answer
-
-      # redirect_to @answer.question, notice: "Your answer successfully created."
-
     else
       render 'questions/show'
     end
@@ -54,7 +50,7 @@ class AnswersController < ApplicationController
   end
 
   def publish_answer
-    # return if @answer.errors.any?
+    return if @answer.errors.any?
     ActionCable.server.broadcast "questions/#{@answer.question_id}",      {
       answer: ApplicationController.render(
         partial: 'answers/answer',

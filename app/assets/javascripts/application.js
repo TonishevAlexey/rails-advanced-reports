@@ -20,6 +20,7 @@
 //= require action_cable
 //= require skim
 //= require vote
+//= require comments
 
 var App = App || {};
 App.cable = ActionCable.createConsumer();

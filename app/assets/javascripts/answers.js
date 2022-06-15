@@ -22,11 +22,11 @@ $(document).on('turbolinks:load', function () {
             return this.follow();
         },
         follow: function() {
-            const question_id = $('.question')[0].id
+            var QuestionId = $('.question')[0].id
 
 
             return this.perform('follow', {
-                question_id: question_id
+                question_id: QuestionId
             });
         },
         received: function(data) {
