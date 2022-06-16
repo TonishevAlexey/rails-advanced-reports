@@ -7,6 +7,9 @@ class Answer < ApplicationRecord
   has_many :links, dependent: :destroy, as: :linkable
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
+  has_many :comments, as: :commentable, dependent: :destroy
+  accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
+
   default_scope { order(best: 'desc').order(created_at: 'asc') }
   validates :body, presence: true
   def best_answer_false

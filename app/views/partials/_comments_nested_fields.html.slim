@@ -1,0 +1,5 @@
+= form_with model: Comment.new, locale: false do |f|
+  p= f.hidden_field "#{resource.class.name.underscore}_id".to_sym, value: resource.id
+  p= f.label :body, 'Comment'
+  p= f.text_area :body, class: 'new_comment_text_area'
+  p= f.submit 'Comment'

@@ -2,12 +2,14 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_question, only: %i[ create ]
   before_action :find_answer, only: %i[update destroy best reward]
+  after_action :publish_answer, only: [:create]
+
   include Votes
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
+    gon.question_id = @question.id
     if @answer.save
-      redirect_to @answer.question, notice: "Your answer successfully created."
     else
       render 'questions/show'
     end
@@ -45,5 +47,19 @@ class AnswersController < ApplicationController
 
   def find_answer
     @answer = current_user.answers.find(params[:id])
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+    ActionCable.server.broadcast "questions/#{@answer.question_id}",      {
+      answer: ApplicationController.render(
+        partial: 'answers/answer',
+        locals: {
+          answer: @answer,
+          current_user: current_user,
+        }
+      )
+    }
+
   end
 end

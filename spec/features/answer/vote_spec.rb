@@ -32,19 +32,19 @@ feature 'Vote answer', '
     end
 
     scenario 'click vote up' do
-      within '.vote' do
+      within '.answers' do
         expect(page).to have_content "0"
         click_on '➕'
-        expect(page).to have_link '➕'
-        expect(page).to_not have_content "0"
+        expect(page).to have_link '−'
+        expect(page).to_not have_content "0", exact: true
         expect(page).to have_content "1"
       end
     end
     scenario 'click vote down' do
-      within '.vote' do
+      within '.answers' do
         expect(page).to have_content "0"
         click_on '−'
-        expect(page).to have_link '−'
+        expect(page).to have_link '➕'
         expect(page).to_not have_content "0"
         expect(page).to have_content "-1"
       end

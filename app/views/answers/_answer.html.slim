@@ -13,18 +13,25 @@ ruby:
               = link.link
               - if current_user&.author_of?(answer)
                 = link_to "❌", link_path(link.id), method: :delete, remote: true
+      .comments id="comments-answer-#{answer.id}"
+        - answer.comments.each do |comment|
+          .comment id = "comment-answer-#{comment.id}"
+            p
+              = comment.body
+              - if current_user&.author_of?(comment)
+                = link_to "❌", comment_path(comment.id), method: :delete, remote: true
       p
-         vote
-          -unless (vote_kind  == "plus" ||  current_user&.author_of?(answer)) ||  !(current_user.present?)
-            = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true ,class: 'vote-plus ',id: "vote-plus-#{answer.id}"
-          -else
-            = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true ,class: 'vote-plus hidden',id: "vote-plus-#{answer.id}"
+        vote
+          - unless (vote_kind == "plus" ||  current_user&.author_of?(answer)) || !(current_user.present?)
+            = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true, class: 'vote-plus ', id: "vote-plus-#{answer.id}"
+          - else
+            = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true, class: 'vote-plus hidden', id: "vote-plus-#{answer.id}"
           .vote-val id="vote-#{answer.id}"
             = answer.vote_result.present? ? answer.vote_result : "0"
-          -unless vote_kind  == "plus" ||  current_user&.author_of?(answer) ||  !(current_user.present?)
-            = link_to "−",vote_down_answer_path(answer.id), method: :post, remote: true,class: 'vote-minus ',id: "vote-minus-#{answer.id}"
-          -else
-            = link_to "−",vote_down_answer_path(answer.id), method: :post, remote: true,class: 'vote-minus hidden',id: "vote-minus-#{answer.id}"
+          - unless vote_kind == "plus" ||  current_user&.author_of?(answer) || !(current_user.present?)
+            = link_to "−",vote_down_answer_path(answer.id), method: :post, remote: true, class: 'vote-minus ', id: "vote-minus-#{answer.id}"
+          - else
+            = link_to "−",vote_down_answer_path(answer.id), method: :post, remote: true, class: 'vote-minus hidden', id: "vote-minus-#{answer.id}"
 
       h2= answer.best if answer.best
     - if current_user&.author_of?(answer.question)
@@ -32,6 +39,8 @@ ruby:
     - if current_user&.author_of?(answer)
       p= link_to 'Delete answer', answer_path(answer), method: :delete, :remote => true, :class => 'delete_answer'
       p= link_to 'Best', best_answer_path(answer), method: :patch, :remote => true, class: 'answer-best', data: { answer_id: answer.id }, html: { id: "answer-best" }
+    - if current_user&.present?
+      p= link_to 'Add comment', '', class: 'create-answer-comment', data: { answer_id: answer.id }
     - if current_user&.author_of?(answer)
       p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
       .files id="files-#{answer.id}"
@@ -53,3 +62,6 @@ ruby:
               partial: "partials/links_nested_fields"
     .actions
       = f.submit 'Save'
+  div class='hidden' id="create-answer-comment-#{answer.id}"
+    p
+      = render 'partials/comments_nested_fields', resource: answer, resource_type: 'answer'

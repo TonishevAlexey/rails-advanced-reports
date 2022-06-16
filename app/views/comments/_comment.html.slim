@@ -1,0 +1,5 @@
+- comment = @comment if @comment
+.comment id = "comment-#{comment.id}"
+  p
+    = comment.body
+    = link_to "❌", comment_path(comment.id), method: :delete, remote: true

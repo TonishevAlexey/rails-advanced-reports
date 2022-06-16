@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   end
   resources :files, only: :destroy
   resources :links, only: %i[destroy]
+  resources :comments, only: %i[ create destroy]
   resources :rewards, only: %i[index]
   resources :questions, concerns: [:vote], shallow: true do
     resources :answers, concerns: [:vote], only: %i[create update destroy] do
@@ -14,4 +15,5 @@ Rails.application.routes.draw do
       patch :reward, on: :member
     end
   end
+  mount ActionCable.server => '/cable'
 end

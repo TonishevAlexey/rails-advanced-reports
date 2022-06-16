@@ -30,6 +30,10 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+# Setup ActionCable test adapter
+server = ActionCable.server
+test_adapter = ActionCable::SubscriptionAdapter::Test.new(server)
+server.instance_variable_set(:@pubsub, test_adapter)
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -42,7 +46,7 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
   Capybara.javascript_driver = :selenium_chrome
-  # Capybara.default_max_wait_time = 300
+  # Capybara.default_max_wait_time = 1000
   Capybara.raise_server_errors = false
   # Capybara.server_port = 3000
 
