@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {registrations: 'registrations', omniauth_callbacks: 'omniauth_callbacks'}
+
+  devise_scope :user do
+    get 'edit_email/:id', to: 'registrations#edit_email', as: 'edit_email'
+    patch 'update_email/:id', to: 'registrations#update_email', as: 'update_email'
+  end
   root to: 'questions#index'
   concern :vote do
     post :vote_up, on: :member
@@ -15,5 +20,5 @@ Rails.application.routes.draw do
       patch :reward, on: :member
     end
   end
-  mount ActionCable.server => '/cable'
+  # mount ActionCable.server => '/cable'
 end
