@@ -46,6 +46,7 @@ group :development, :test do
   gem 'launchy'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 5.0.0'
+  gem 'capybara-email'
 end
 
 group :development do
@@ -56,6 +57,8 @@ group :development do
   gem 'rubocop-rails', require: false
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'letter_opener'
+
 end
 
 group :test do
@@ -79,3 +82,8 @@ gem 'merit'
 gem 'rack-cors'
 gem 'gon'
 gem 'skim'
+gem 'omniauth'
+gem 'omniauth-github'
+gem 'omniauth-vkontakte'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-rails_csrf_protection'
