@@ -3,8 +3,9 @@ class AnswersController < ApplicationController
   before_action :find_question, only: %i[ create ]
   before_action :find_answer, only: %i[update destroy best reward]
   after_action :publish_answer, only: [:create]
-
+  authorize_resource
   include Votes
+
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
@@ -30,9 +31,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if current_user.author_of?(@answer)
       @answer.destroy
-    end
   end
 
   private
