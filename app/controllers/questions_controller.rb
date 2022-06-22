@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :question, only: %i[show edit update destroy]
   after_action :publish_question, only: :create
-
+  authorize_resource
   include Votes
 
   def index
@@ -21,7 +21,7 @@ class QuestionsController < ApplicationController
   def edit; end
 
   def update
-    @question.update(question_params) if current_user.author_of?(@question)
+    @question.update(question_params)
   end
 
   def create
@@ -35,12 +35,8 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if current_user.author_of?(question)
       @question.destroy
       redirect_to questions_path
-    else
-      redirect_to @question, notice: 'Not your question!'
-    end
   end
 
   private

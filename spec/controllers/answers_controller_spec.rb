@@ -15,7 +15,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirects to question show view' do
         patch :best, format: :js, params: { id: answer }
-        expect(response).to render_template :best
+        expect(response).to have_http_status(403)
       end
     end
   end
