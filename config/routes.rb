@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   devise_for :users, controllers: {registrations: 'registrations', omniauth_callbacks: 'omniauth_callbacks'}
 
   devise_scope :user do
@@ -18,6 +19,16 @@ Rails.application.routes.draw do
     resources :answers, concerns: [:vote], only: %i[create update destroy] do
       patch :best, on: :member
       patch :reward, on: :member
+    end
+  end
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: :index do
+        get :me, on: :collection
+      end
+      resources :questions, only: %i[index show create], shallow: true do
+        resources :answers, only: %i[index show create]
+      end
     end
   end
   # mount ActionCable.server => '/cable'
