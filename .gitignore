@@ -23,7 +23,8 @@
 
 /node_modules
 /yarn-error.log
-
+/config/development.sphinx.conf
+/db/sphinx/development
 /public/assets
 .byebug_history
 
@@ -32,4 +33,4 @@
 /log/
 /tmp/
 .idea
-!/config/secrets.yml
+
