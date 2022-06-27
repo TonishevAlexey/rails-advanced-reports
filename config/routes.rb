@@ -1,6 +1,12 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   use_doorkeeper
-  devise_for :users, controllers: {registrations: 'registrations', omniauth_callbacks: 'omniauth_callbacks'}
+  authenticate :user, ->(u) { u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
+  devise_for :users, controllers: { registrations: 'registrations', omniauth_callbacks: 'omniauth_callbacks' }
 
   devise_scope :user do
     get 'edit_email/:id', to: 'registrations#edit_email', as: 'edit_email'
@@ -11,9 +17,10 @@ Rails.application.routes.draw do
     post :vote_up, on: :member
     post :vote_down, on: :member
   end
+  resources :subscriptions, only: %i[create destroy]
   resources :files, only: :destroy
   resources :links, only: %i[destroy]
-  resources :comments, only: %i[ create destroy]
+  resources :comments, only: %i[create destroy]
   resources :rewards, only: %i[index]
   resources :questions, concerns: [:vote], shallow: true do
     resources :answers, concerns: [:vote], only: %i[create update destroy] do

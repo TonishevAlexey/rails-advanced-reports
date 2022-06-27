@@ -41,12 +41,12 @@ gem 'bootsnap', '>= 1.1.0', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'capybara-email'
   gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'launchy'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 5.0.0'
-  gem 'capybara-email'
 end
 
 group :development do
@@ -54,11 +54,10 @@ group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'letter_opener'
   gem 'rubocop-rails', require: false
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'letter_opener'
-
 end
 
 group :test do
@@ -76,18 +75,21 @@ end
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 # Use jquery as the JavaScript library
 gem 'aws-sdk-s3', require: false
+gem 'cancancan'
 gem 'cocoon'
+gem 'gon'
 gem 'jquery-rails'
 gem 'merit'
-gem 'rack-cors'
-gem 'gon'
-gem 'skim'
 gem 'omniauth'
 gem 'omniauth-github'
-gem 'omniauth-vkontakte'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
-gem 'cancancan'
+gem 'omniauth-vkontakte'
+gem 'rack-cors'
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'skim'
+gem 'whenever', require: false
 gem 'doorkeeper'
 gem 'active_model_serializers', '~> 0.10'
 gem 'oj'
