@@ -9,7 +9,7 @@ class Answer < ApplicationRecord
 
   has_many :comments, as: :commentable, dependent: :destroy
   accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
-
+  after_create :send_email
   default_scope { order(best: 'desc').order(created_at: 'asc') }
   validates :body, presence: true
   def best_answer_false
@@ -19,5 +19,10 @@ class Answer < ApplicationRecord
 
   def vote_result
     votes.sum(:value)
+  end
+  private
+
+  def send_email
+    AnswerNotificationJob.perform_later(question, self) if question.subscriptions.exists?
   end
 end

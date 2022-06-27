@@ -28,7 +28,8 @@ describe Ability, type: :model do
     let(:other_question) { create(:question, user: other) }
     let(:answer) { create :answer, question: question, user: user }
     let(:other_answer) { create(:answer, question: other_question, user: other) }
-
+    let(:subscription) { create(:subscription, question: question, user: user) }
+    let(:other_subscription) { create(:subscription, question: question, user: other) }
 
     it { should_not be_able_to :manage, :all }
     it { should be_able_to :read, :all }
@@ -36,12 +37,16 @@ describe Ability, type: :model do
     it { should be_able_to :create, Question }
     it { should be_able_to :create, Answer }
     it { should be_able_to :create, Comment }
+    it { should be_able_to :create, Subscription }
 
     it { should be_able_to :update, question }
     it { should_not be_able_to :update, other_question }
 
     it { should be_able_to :update, answer }
     it { should_not be_able_to :update, other_answer }
+
+    it { should be_able_to :destroy, subscription, user: user }
+    it { should_not be_able_to :destroy, other_subscription, user: user }
 
     it { should be_able_to :destroy, question, user: user }
     it { should_not be_able_to :destroy, other_question, user: user }

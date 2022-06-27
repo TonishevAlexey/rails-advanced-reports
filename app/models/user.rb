@@ -11,9 +11,13 @@ class User < ApplicationRecord
   has_many :rewards
   has_many :votes
   has_many :authorizations
+  has_many :subscriptions, dependent: :destroy
 
   def author_of?(resource)
     resource.user_id == id
+  end
+  def subscription?(object)
+    object.subscriptions.where(user_id: self.id).exists?
   end
   def self.find_for_oauth(auth)
     authorization = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first

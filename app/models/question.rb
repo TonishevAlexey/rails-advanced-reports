@@ -13,7 +13,16 @@ class Question < ApplicationRecord
   has_many :comments, as: :commentable, dependent: :destroy
   accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
 
+  has_many :subscriptions, dependent: :destroy
+
   def vote_result
     votes.sum(:value)
+  end
+  after_create :create_subscription
+
+  private
+
+  def create_subscription
+    subscriptions.create(user_id: user_id)
   end
 end
