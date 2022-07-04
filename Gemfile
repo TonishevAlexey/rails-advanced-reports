@@ -58,6 +58,13 @@ group :development do
   gem 'rubocop-rails', require: false
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm', require: false
+  gem 'capistrano-passenger', require: false
+  gem 'capistrano-sidekiq', require: false
+  gem 'capistrano3-unicorn', require: false
 end
 
 group :test do
@@ -96,4 +103,5 @@ gem 'oj'
 gem 'mysql2',          '~> 0.4',    :platform => :ruby
 gem 'jdbc-mysql',      '~> 5.1.35', :platform => :jruby
 gem 'thinking-sphinx', '~> 5.4'
+gem 'unicorn'
 
