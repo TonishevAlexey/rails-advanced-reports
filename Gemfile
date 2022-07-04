@@ -100,7 +100,7 @@ gem 'whenever', require: false
 gem 'doorkeeper'
 gem 'active_model_serializers', '~> 0.10'
 gem 'oj'
-gem 'mysql2',          '~> 0.4',    :platform => :ruby
+gem 'mysql2'
 gem 'jdbc-mysql',      '~> 5.1.35', :platform => :jruby
 gem 'thinking-sphinx', '~> 5.4'
 gem 'unicorn'
