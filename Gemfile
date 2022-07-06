@@ -64,7 +64,7 @@ group :development do
   gem 'capistrano-rvm', require: false
   gem 'capistrano-passenger', require: false
   gem 'capistrano-sidekiq', require: false
-  # gem 'capistrano3-unicorn', require: false
+  gem 'capistrano3-unicorn', require: false
 end
 
 group :test do
@@ -103,5 +103,5 @@ gem 'oj'
 gem 'mysql2'
 gem 'jdbc-mysql',      '~> 5.1.35', :platform => :jruby
 gem 'thinking-sphinx', '~> 5.4'
-# gem 'unicorn'
+gem 'unicorn'
 
