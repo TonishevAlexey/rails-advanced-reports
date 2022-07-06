@@ -1,5 +1,5 @@
 # paths
-app_path = "/home/deploy/rails_advanced_reports"
+app_path = "/home/deploy/rails-advanced-reports"
 working_directory "#{app_path}/current"
 pid               "#{app_path}/current/tmp/pids/unicorn.pid"
 
