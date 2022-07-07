@@ -1,0 +1,4 @@
+production:
+  pidfile: /var/run/sidekiq_production.pid
+  logfile: log/sidekiq_production.log
+  concurrency: 50
