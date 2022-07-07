@@ -9,8 +9,8 @@ set :repo_url, "git@github.com:TonishevAlexey/rails-advanced-reports.git"
 set :deploy_to, "/home/deploy/rails-advanced-reports"
 set :deploy_user, 'deploy'
 set :pty, false
-set :sidekiq_monit_use_sudo, false
-set :sidekiq_config => 'config/sidekiq.yml'
+set :sidekiq_pid                  => File.join( 'var', 'run', 'sidekiq.pid')
+
 # Default value for :linked_files is []
 append :linked_files, "config/database.yml", 'config/master.key'
 
