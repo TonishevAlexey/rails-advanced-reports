@@ -1,15 +1,16 @@
-.subscription
-  - if current_user&.subscription?(resource)
-    .unsubscribe
-      = link_to 'Отписаться от вопроса',
-              subscription_path(@subscription),
-              remote: true,
-              method: :delete,
-              class: 'text-decoration-none'
-  - else
-    .subscribe
-      = link_to 'Подписаться на вопроа',
-              subscriptions_path(question_id:resource.id),
-              remote: true,
-              method: :post,
-              class: 'text-decoration-none'
+- cache @subscription do
+  .subscription
+    - if current_user&.subscription?(resource)
+      .unsubscribe
+        = link_to 'Отписаться от вопроса',
+                subscription_path(@subscription),
+                remote: true,
+                method: :delete,
+                class: 'text-decoration-none'
+    - else
+      .subscribe
+        = link_to 'Подписаться на вопроа',
+                subscriptions_path(question_id:resource.id),
+                remote: true,
+                method: :post,
+                class: 'text-decoration-none'

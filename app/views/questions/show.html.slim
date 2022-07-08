@@ -8,7 +8,8 @@ ruby:
   p= @question.body
 
   - if can?(:create, Subscription)
-    = render 'subscriptions/subscription', resource: @question
+    - cache ['subscription',@question] do
+      = render 'subscriptions/subscription', resource: @question
   - if current_user&.author_of?(@question)
     = link_to 'Edit question', edit_question_path(@question)
   - if current_user&.present?
@@ -18,20 +19,22 @@ ruby:
   .comments id="comments-question-#{@question.id}"
     - @question.comments.each do |comment|
       .comment id = "comment-question-#{comment.id}"
-        p
-          = comment.body
+        - cache comment do
+          p = comment.body
           - if current_user&.author_of?(comment)
             = link_to "❌", comment_path(comment.id), method: :delete, remote: true
   div class='hidden' id="create-question-comment-#{@question.id}"
-    p
-      = render 'partials/comments_nested_fields', resource: @question, resource_type: 'question'
+    - cache ['comments_nested_fields',@question] do
+      p
+        = render 'partials/comments_nested_fields', resource: @question, resource_type: 'question'
   - @question.links.each do |link|
     .link id = "link-#{link.id}"
-      p
-        = link.name + ": "
-        = link.link
-        - if current_user&.author_of?(@question)
-          = link_to "❌", link_path(link.id), method: :delete, remote: true
+      - cache link do
+        p
+          = link.name + ": "
+          = link.link
+          - if current_user&.author_of?(@question)
+            = link_to "❌", link_path(link.id), method: :delete, remote: true
   p
     .vote
       - unless (vote_kind == "plus" ||  current_user&.author_of?(@question)) || !(current_user.present?)
@@ -48,16 +51,18 @@ ruby:
 
   - if @question.files.attached?
     - @question.files.each do |file|
-      .file id = "file-#{file.id}"
-        p= link_to file.filename.to_s, url_for(file)
-        - if current_user&.author_of?(@question)
-          = link_to "Delete file", file_path(file.id), method: :delete, remote: true
+      - cache file do
+        .file id = "file-#{file.id}"
+          p= link_to file.filename.to_s, url_for(file)
+          - if current_user&.author_of?(@question)
+            = link_to "Delete file", file_path(file.id), method: :delete, remote: true
   / - if current_user&.author_of?(@question)
   /   p= link_to 'Delete question', question_path(@question), method: :delete, class: 'btn btn-danger'
   h5= "Ответы:"
 
   .answers
-    div= render partial: '/answers/answer', collection: @question.answers
+    - cache @question.answers do
+      div= render partial: '/answers/answer', collection: @question.answers
 
-  div= render 'answers/new'
+div= render 'answers/new'
 
