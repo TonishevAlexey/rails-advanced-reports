@@ -1,67 +1,69 @@
-ruby:
-  vote = answer.votes.user_vote(current_user&.id).first
-  vote_kind = vote.present? ? vote.kind : ""
-- if answer.persisted?
-  answer id="answer-del-#{answer.id}"
-    .answer id="answer-#{answer.id}"
-      = answer.body
-      .links id="links-#{answer.id}"
-        - answer.links.each do |link|
-          .link id = "link-#{link.id}"
-            p
-              = link.name + ": "
-              = link.link
-              - if current_user&.author_of?(answer)
-                = link_to "❌", link_path(link.id), method: :delete, remote: true
-      .comments id="comments-answer-#{answer.id}"
-        - answer.comments.each do |comment|
-          .comment id = "comment-answer-#{comment.id}"
-            p
-              = comment.body
-              - if current_user&.author_of?(comment)
-                = link_to "❌", comment_path(comment.id), method: :delete, remote: true
-      p
-        vote
-          - unless (vote_kind == "plus" ||  current_user&.author_of?(answer)) || !(current_user.present?)
-            = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true, class: 'vote-plus ', id: "vote-plus-#{answer.id}"
-          - else
-            = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true, class: 'vote-plus hidden', id: "vote-plus-#{answer.id}"
-          .vote-val id="vote-#{answer.id}"
-            = answer.vote_result.present? ? answer.vote_result : "0"
-          - unless vote_kind == "plus" ||  current_user&.author_of?(answer) || !(current_user.present?)
-            = link_to "−",vote_down_answer_path(answer.id), method: :post, remote: true, class: 'vote-minus ', id: "vote-minus-#{answer.id}"
-          - else
-            = link_to "−",vote_down_answer_path(answer.id), method: :post, remote: true, class: 'vote-minus hidden', id: "vote-minus-#{answer.id}"
+- cache answer do
+  ruby:
+    vote = answer.votes.user_vote(current_user&.id).first
+    vote_kind = vote.present? ? vote.kind : ""
 
-      h2= answer.best if answer.best
-    - if current_user&.author_of?(answer.question)
-      p= link_to 'Reward answer', reward_answer_path(answer), method: :patch, :remote => true, :class => 'delete_answer'
-    - if current_user&.author_of?(answer)
-      p= link_to 'Delete answer', answer_path(answer), method: :delete, :remote => true, :class => 'delete_answer'
-      p= link_to 'Best', best_answer_path(answer), method: :patch, :remote => true, class: 'answer-best', data: { answer_id: answer.id }, html: { id: "answer-best" }
-    - if current_user&.present?
-      p= link_to 'Add comment', '', class: 'create-answer-comment', data: { answer_id: answer.id }
-    - if current_user&.author_of?(answer)
-      p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-      .files id="files-#{answer.id}"
-        - if answer.files.attached?
-          div= render partial: '/answers/file', collection: answer.files
-  = form_with model: answer, locale: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }  do |f|
-    p
-      = f.label :body, "Answer body", id: "body_update"
-      = f.text_area :body, id: "body_update"
-    p
-      = f.label :files
-      = f.file_field :files, multiple: true
-    p
-      = f.fields_for :links do |link|
-        = render "partials/links_nested_fields", f: link
-    p
-      = link_to_add_association "Ссылки", f, "links",
-              class: 'create_object',
-              partial: "partials/links_nested_fields"
-    .actions
-      = f.submit 'Save'
-  div class='hidden' id="create-answer-comment-#{answer.id}"
-    p
-      = render 'partials/comments_nested_fields', resource: answer, resource_type: 'answer'
+  - if answer.persisted?
+    answer id="answer-del-#{answer.id}"
+      .answer id="answer-#{answer.id}"
+        = answer.body
+        .links id="links-#{answer.id}"
+          - answer.links.each do |link|
+            .link id = "link-#{link.id}"
+              p
+                = link.name + ": "
+                = link.link
+                - if current_user&.author_of?(answer)
+                  = link_to "❌", link_path(link.id), method: :delete, remote: true
+        .comments id="comments-answer-#{answer.id}"
+          - answer.comments.each do |comment|
+            .comment id = "comment-answer-#{comment.id}"
+              p
+                = comment.body
+                - if current_user&.author_of?(comment)
+                  = link_to "❌", comment_path(comment.id), method: :delete, remote: true
+        p
+          vote
+            - unless (vote_kind == "plus" ||  current_user&.author_of?(answer)) || !(current_user.present?)
+              = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true, class: 'vote-plus ', id: "vote-plus-#{answer.id}"
+            - else
+              = link_to "➕", vote_up_answer_path(answer.id), method: :post, remote: true, class: 'vote-plus hidden', id: "vote-plus-#{answer.id}"
+            .vote-val id="vote-#{answer.id}"
+              = answer.vote_result.present? ? answer.vote_result : "0"
+            - unless vote_kind == "plus" ||  current_user&.author_of?(answer) || !(current_user.present?)
+              = link_to "−",vote_down_answer_path(answer.id), method: :post, remote: true, class: 'vote-minus ', id: "vote-minus-#{answer.id}"
+            - else
+              = link_to "−",vote_down_answer_path(answer.id), method: :post, remote: true, class: 'vote-minus hidden', id: "vote-minus-#{answer.id}"
+
+        h2= answer.best if answer.best
+      - if current_user&.author_of?(answer.question)
+        p= link_to 'Reward answer', reward_answer_path(answer), method: :patch, :remote => true, :class => 'delete_answer'
+      - if current_user&.author_of?(answer)
+        p= link_to 'Delete answer', answer_path(answer), method: :delete, :remote => true, :class => 'delete_answer'
+        p= link_to 'Best', best_answer_path(answer), method: :patch, :remote => true, class: 'answer-best', data: { answer_id: answer.id }, html: { id: "answer-best" }
+      - if current_user&.present?
+        p= link_to 'Add comment', '', class: 'create-answer-comment', data: { answer_id: answer.id }
+      - if current_user&.author_of?(answer)
+        p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+        .files id="files-#{answer.id}"
+          - if answer.files.attached?
+            div= render partial: '/answers/file', collection: answer.files
+    = form_with model: answer, locale: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }  do |f|
+      p
+        = f.label :body, "Answer body", id: "body_update"
+        = f.text_area :body, id: "body_update"
+      p
+        = f.label :files
+        = f.file_field :files, multiple: true
+      p
+        = f.fields_for :links do |link|
+          = render "partials/links_nested_fields", f: link
+      p
+        = link_to_add_association "Ссылки", f, "links",
+                class: 'create_object',
+                partial: "partials/links_nested_fields"
+      .actions
+        = f.submit 'Save'
+    div class='hidden' id="create-answer-comment-#{answer.id}"
+      p
+        = render 'partials/comments_nested_fields', resource: answer, resource_type: 'answer'

@@ -1,7 +1,7 @@
 class Answer < ApplicationRecord
   has_many :votes, dependent: :destroy, as: :votable
   belongs_to :user
-  belongs_to :question
+  belongs_to :question, touch: true
   has_many_attached :files
 
   has_many :links, dependent: :destroy, as: :linkable
